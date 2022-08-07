@@ -1,0 +1,69 @@
+type SyntheticBotTokenFactory @entity {
+  # SyntheticBotTokenFactory contract address.
+  id: ID!
+
+  numberOfRegisteredTokens: Int!
+
+  numberOfPositions: Int!
+  totalCostBasis: BigInt!
+  totalRewardsClaimed: BigInt!
+}
+
+type BotToken @entity {
+  # SyntheticBotToken contract address.
+  id: ID!
+  
+  numberOfPositions: Int!
+  totalCostBasis: BigInt!
+  totalRewardsClaimed: BigInt!
+  dataFeedAddress: String!
+  tradingBotAddress: String!
+
+  positions: [Position!]! @derivedFrom(field: "botToken")
+}
+
+type Position @entity {
+  # BotToken ID + user wallet address.
+  id: ID!
+
+  botToken: BotToken!
+
+  user: User!
+  numberOfTokens: BigInt!
+  numberOfWeeks: BigInt!
+  costBasis: BigInt!
+
+  createdOn: BigInt!
+  rewardsEndOn: BigInt!
+  lastUpdatedOn: BigInt!
+  rewardPerTokenStored: BigInt!
+  rewardRate: BigInt!
+}
+
+type User @entity {
+  # User wallet address.
+  id: ID!
+  
+  totalCostBasis: BigInt!
+  totalRewardsClaimed: BigInt!
+
+  positions: [Position!]! @derivedFrom(field: "user")
+}
+
+type PlatformDayData @entity {
+  # Timestamp rounded to current day by dividing by 86400.
+  id: ID! 
+  date: Int!
+
+  dailyRewardsClaimed: BigInt!
+  dailyCostBasis: BigInt!
+}
+
+type BotTokenDayData @entity {
+  # Timestamp rounded to current day by dividing by 86400.
+  id: ID! 
+  date: Int!
+
+  dailyRewardsClaimed: BigInt!
+  dailyCostBasis: BigInt!
+}
