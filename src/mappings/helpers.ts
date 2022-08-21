@@ -15,7 +15,7 @@ import {
   export let ONE_BD = BigDecimal.fromString("1");
   export let BI_18 = BigInt.fromI32(18);
 
-  interface PositionInfo {
+  export interface PositionInfo {
     numberOfTokens: BigInt;
     createdOn: BigInt;
     rewardsEndOn: BigInt;
@@ -105,4 +105,20 @@ import {
       rewardPerTokenStored: rewardPerTokenStored,
       rewardRate: rewardRate
     } as PositionInfo
+  }
+
+  export function fetchTotalCostBasis(botTokenAddress: Address): BigInt {
+    let contract = SyntheticBotToken.bind(botTokenAddress);
+  
+    let result = contract.try_totalCostBasis();
+  
+    return result.value ? result.value : ZERO_BI;
+  }
+
+  export function fetchUserCostBasis(botTokenAddress: Address, userAddress: Address): BigInt {
+    let contract = SyntheticBotToken.bind(botTokenAddress);
+  
+    let result = contract.try_userCostBasis(userAddress);
+  
+    return result.value ? result.value : ZERO_BI;
   }
