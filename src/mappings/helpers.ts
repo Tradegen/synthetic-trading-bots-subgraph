@@ -14,15 +14,6 @@ import {
   export let ZERO_BD = BigDecimal.fromString("0");
   export let ONE_BD = BigDecimal.fromString("1");
   export let BI_18 = BigInt.fromI32(18);
-
-  export interface PositionInfo {
-    numberOfTokens: BigInt;
-    createdOn: BigInt;
-    rewardsEndOn: BigInt;
-    lastUpdateTime: BigInt;
-    rewardPerTokenStored: BigInt;
-    rewardRate: BigInt;
-  }
   
   export let botTokenFactoryContract = SyntheticBotTokenFactory.bind(
     Address.fromString(SYNTHETIC_BOT_TOKEN_FACTORY_ADDRESS)
@@ -86,25 +77,18 @@ import {
     return tradingBotResult.value ? tradingBotResult.value : Address.fromString(ADDRESS_ZERO);
   }
 
-  export function fetchPositionInfo(botTokenAddress: Address, ID: BigInt): PositionInfo {
+  export function fetchPositionInfo(botTokenAddress: Address, ID: BigInt): BigInt[] {
     let contract = SyntheticBotToken.bind(botTokenAddress);
   
     let positionInfoResult = contract.try_positions(ID);
-    let numberOfTokens:BigInt = positionInfoResult.value.toMap().get("value0")?.toBigInt() ?? ZERO_BI;
-    let createdOn:BigInt = positionInfoResult.value.toMap().get("value1")?.toBigInt() ?? ZERO_BI;
-    let rewardsEndOn:BigInt = positionInfoResult.value.toMap().get("value2")?.toBigInt() ?? ZERO_BI;
-    let lastUpdateTime:BigInt = positionInfoResult.value.toMap().get("value3")?.toBigInt() ?? ZERO_BI;
-    let rewardPerTokenStored:BigInt = positionInfoResult.value.toMap().get("value4")?.toBigInt() ?? ZERO_BI;
-    let rewardRate:BigInt = positionInfoResult.value.toMap().get("value5")?.toBigInt() ?? ZERO_BI;
+    let numberOfTokens = positionInfoResult.value.toMap().get("value0").toBigInt();
+    let createdOn = positionInfoResult.value.toMap().get("value1").toBigInt();
+    let rewardsEndOn = positionInfoResult.value.toMap().get("value2").toBigInt();
+    let lastUpdateTime = positionInfoResult.value.toMap().get("value3").toBigInt();
+    let rewardPerTokenStored = positionInfoResult.value.toMap().get("value4").toBigInt();
+    let rewardRate = positionInfoResult.value.toMap().get("value5").toBigInt();
   
-    return {
-      numberOfTokens: numberOfTokens,
-      createdOn: createdOn,
-      rewardsEndOn: rewardsEndOn,
-      lastUpdateTime: lastUpdateTime,
-      rewardPerTokenStored: rewardPerTokenStored,
-      rewardRate: rewardRate
-    } as PositionInfo
+    return [numberOfTokens, createdOn, rewardsEndOn, lastUpdateTime, rewardPerTokenStored, rewardRate];
   }
 
   export function fetchTotalCostBasis(botTokenAddress: Address): BigInt {

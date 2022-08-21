@@ -12,7 +12,6 @@ import {
     ZERO_BI,
     SYNTHETIC_BOT_TOKEN_FACTORY_ADDRESS,
     fetchPositionInfo,
-    PositionInfo,
     fetchTotalCostBasis,
   } from "./helpers";
   import {
@@ -22,7 +21,7 @@ import {
 
 export function handleMintedTokens(event: MintedTokens): void {
     let newTotalCostBasis = fetchTotalCostBasis(event.address);
-    let positionInfo: PositionInfo = fetchPositionInfo(event.address, event.params.positionID);
+    let positionInfo = fetchPositionInfo(event.address, event.params.positionID);
 
     let factory = SyntheticBotTokenFactory.load(SYNTHETIC_BOT_TOKEN_FACTORY_ADDRESS);
     if (factory === null) {
@@ -58,11 +57,11 @@ export function handleMintedTokens(event: MintedTokens): void {
     position.numberOfTokens = event.params.numberOfTokens;
     position.numberOfWeeks = event.params.numberOfWeeks;
     position.costBasis = changeInCostBasis;
-    position.createdOn = positionInfo.createdOn;
-    position.rewardsEndOn = positionInfo.rewardsEndOn;
-    position.lastUpdatedOn = positionInfo.lastUpdateTime;
-    position.rewardPerTokenStored = positionInfo.rewardPerTokenStored;
-    position.rewardRate = positionInfo.rewardRate;
+    position.createdOn = positionInfo[1];
+    position.rewardsEndOn = positionInfo[2];
+    position.lastUpdatedOn = positionInfo[3];
+    position.rewardPerTokenStored = positionInfo[4];
+    position.rewardRate = positionInfo[5];
     position.save();
 
     let platformDayData = updatePlatformDayData(event);
@@ -75,7 +74,7 @@ export function handleMintedTokens(event: MintedTokens): void {
 }
 
 export function handleClaimedRewards(event: ClaimedRewards): void {
-    let positionInfo: PositionInfo = fetchPositionInfo(event.address, event.params.positionID);
+    let positionInfo = fetchPositionInfo(event.address, event.params.positionID);
 
     let factory = SyntheticBotTokenFactory.load(SYNTHETIC_BOT_TOKEN_FACTORY_ADDRESS);
     if (factory === null) {
@@ -106,11 +105,11 @@ export function handleClaimedRewards(event: ClaimedRewards): void {
     let position = new Position(positionID);
     position.botToken = event.address.toHexString();
     position.user = event.params.user.toHexString();
-    position.createdOn = positionInfo.createdOn;
-    position.rewardsEndOn = positionInfo.rewardsEndOn;
-    position.lastUpdatedOn = positionInfo.lastUpdateTime;
-    position.rewardPerTokenStored = positionInfo.rewardPerTokenStored;
-    position.rewardRate = positionInfo.rewardRate;
+    position.createdOn = positionInfo[1];
+    position.rewardsEndOn = positionInfo[2];
+    position.lastUpdatedOn = positionInfo[3];
+    position.rewardPerTokenStored = positionInfo[4];
+    position.rewardRate = positionInfo[5];
     position.save();
 
     let platformDayData = updatePlatformDayData(event);
