@@ -5,7 +5,7 @@ This subgraph dynamically tracks any synthetic trading bot token created by the 
 - aggregated data across synthetic bot tokens and user positions,
 - data on individual synthetic bot tokens,
 - data on individual user positions,
-- data on each user's positions, total cost basis, and total rewards claimed
+- data on each user's positions, total cost basis, and total rewards claimed,
 - historical data on reward distribution and cost basis
 
 ## Running Locally
