@@ -1,6 +1,6 @@
 # Synthetic Trading Bots Subgraph
 
-This subgraph dynamically tracks any synthetic trading bot token created by the SyntheticTradingBotFactory contract. It tracks the current state of SyntheticBotToken contracts, and contains derived stats for reward distribution and user cost basis.
+This subgraph dynamically tracks any synthetic trading bot token created by the [SyntheticTradingBotFactory](https://github.com/Tradegen/synthetic-trading-bots/blob/main/contracts/SyntheticBotTokenFactory.sol) contract. It tracks the current state of SyntheticBotToken contracts, and contains derived stats for reward distribution and user cost basis.
 
 - aggregated data across synthetic bot tokens and user positions,
 - data on individual synthetic bot tokens,
