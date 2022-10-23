@@ -2,10 +2,16 @@ type SyntheticBotTokenFactory @entity {
   # SyntheticBotTokenFactory contract address.
   id: ID!
 
+  # Number of unique SyntheticBotTokens registered in the protocol.
   numberOfRegisteredTokens: Int!
 
+  # Total number of (token-user) pairs.
   numberOfPositions: Int!
+
+  # Total USD spent by all users across all tokens.
   totalCostBasis: BigInt!
+
+  # Total USD rewards distributed by all tokens.
   totalRewardsClaimed: BigInt!
 }
 
@@ -13,12 +19,24 @@ type BotToken @entity {
   # SyntheticBotToken contract address.
   id: ID!
   
+  # Total number of positions for this specific token.
   numberOfPositions: Int!
+
+  # Total USD spent on this token by all users.
   totalCostBasis: BigInt!
+
+  # Total USD rewards claimed from this token by all users.
   totalRewardsClaimed: BigInt!
+
+  # Address of this token's data feed contract.
+  # The data feed is used for determining the oracle price of the token.
   dataFeedAddress: String!
+
+  # Address of this token's trading bot contract.
+  # The trading bot makes simulated trades, which are reflected in the bot's data feed.
   tradingBotAddress: String!
 
+  # Position entities associated with this bot token.
   positions: [Position!]! @derivedFrom(field: "botToken")
 }
 
@@ -26,17 +44,38 @@ type Position @entity {
   # BotToken ID + user wallet address.
   id: ID!
 
+  # Reference to the position's underlying bot token.
   botToken: BotToken!
 
+  # Reference to the position's owner.
   user: User!
+
+  # Number of tokens in the position.
+  # 18 decimals.
   numberOfTokens: BigInt!
+
+  # Number of weeks that rewards will be distributed for. 
+  # This value is specified when the position is minted.
+  # Rewards begin distributing when the position is minted, and stop distributing once the specified number of weeks have elapsed.
   numberOfWeeks: BigInt!
+
+  # Amount of USD used to mint the position.
+  # 18 decimals.
   costBasis: BigInt!
 
+  # Timestamp at which the position was minted.
   createdOn: BigInt!
+
+  # Timestamp at which the position will stop distributing rewards.
   rewardsEndOn: BigInt!
+
+  # Timestamp at which rewards were last claimed.
   lastUpdatedOn: BigInt!
+
+  # Amount of reward tokens distributed per bot token.
   rewardPerTokenStored: BigInt!
+
+  # Amount of reward tokens distributed per second.
   rewardRate: BigInt!
 }
 
@@ -44,9 +83,13 @@ type User @entity {
   # User wallet address.
   id: ID!
   
+  # Total USD the user has spent across all positions.
   totalCostBasis: BigInt!
+
+  # Total USD the user has claimed across all positions.
   totalRewardsClaimed: BigInt!
 
+  # Position entities associated with this user.
   positions: [Position!]! @derivedFrom(field: "user")
 }
 
@@ -55,7 +98,10 @@ type PlatformDayData @entity {
   id: ID! 
   date: Int!
 
+  # Total USD distributed for the day across all bot tokens.
   dailyRewardsClaimed: BigInt!
+
+  # Total USD spent on minting positions for the day across all bot tokens.
   dailyCostBasis: BigInt!
 }
 
@@ -64,6 +110,9 @@ type BotTokenDayData @entity {
   id: ID! 
   date: Int!
 
+  # Total USD distributed for the day for this specific bot token.
   dailyRewardsClaimed: BigInt!
+
+  # Total USD spent on minting positions for the day for this specific bot token.
   dailyCostBasis: BigInt!
 }
